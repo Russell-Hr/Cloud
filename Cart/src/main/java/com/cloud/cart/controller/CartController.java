@@ -19,7 +19,6 @@ public class CartController {
     @GetMapping("/direct")
     public ResponseEntity<String> createDirectMessage() {
         String messageFromCart = "DirectMessageFromCart";
-        //template.setExchange("commonExchange");
         template.convertAndSend("queueUser", messageFromCart);
         return ResponseEntity.ok("Added to a queueUser");
     }
@@ -30,5 +29,19 @@ public class CartController {
         template.setExchange("commonExchange");
         template.convertAndSend("queueCommon", messageFromCart);
         return ResponseEntity.ok("Added to a queueCommon");
+    }
+
+    @GetMapping("/key1")
+    public ResponseEntity<String> createKeyMessageOne() {
+        template.setExchange("directExchange");
+        template.convertAndSend("toCartAndProduct", "KeyMessageToCartAndProduct");
+        return ResponseEntity.ok("Added to queueCart and queueProduct");
+    }
+
+    @GetMapping("/key2")
+    public ResponseEntity<String> createKeyMessageTwo() {
+        template.setExchange("directExchange");
+        template.convertAndSend("toUserAndCheckout", "KeyMessageToUserAndCheckout");
+        return ResponseEntity.ok("Added to queueUser and queueCheckout");
     }
 }
