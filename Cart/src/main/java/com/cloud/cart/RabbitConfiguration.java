@@ -7,6 +7,7 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -39,7 +40,57 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public Queue queue() {
-        return new Queue("queue");
+    public Queue queueCart() {
+        return new Queue("queueCart");
+    }
+
+    @Bean
+    public Queue queueCheckout() {
+        return new Queue("queueCheckout");
+    }
+
+    @Bean
+    public Queue queueProduct() {
+        return new Queue("queueProduct");
+    }
+
+    @Bean
+    public Queue queueUser() {
+        return new Queue("queueUser");
+    }
+
+    @Bean
+    public Queue queueCommon() {
+        return new Queue("queueCommon");
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange("commonExchange");
+    }
+
+//    @Bean
+//    public Binding bindingCart() {
+//        return BindingBuilder.bind(queueCart()).to(fanoutExchange());
+//    }
+
+//    @Bean
+//    public Binding bindingCheckout() {
+//        return BindingBuilder.bind(queueCheckout()).to(fanoutExchange());
+//    }
+//
+//    @Bean
+//    public Binding bindingProduct() {
+//        return BindingBuilder.bind(queueProduct()).to(fanoutExchange());
+//    }
+
+//    @Bean
+//    public Binding bindingUser() {
+//        return BindingBuilder.bind(queueUser()).to(fanoutExchange());
+//    }
+
+    @Bean
+    public Binding bindingCommon() {
+        return BindingBuilder.bind(queueCommon()).to(fanoutExchange());
     }
 }

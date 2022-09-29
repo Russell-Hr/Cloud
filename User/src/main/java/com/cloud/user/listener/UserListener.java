@@ -13,8 +13,16 @@ public class UserListener {
     @Autowired
     private ComplexUserRepository complexUserRepository;
 
-    @RabbitListener(queues = "queue")
-    public void processQueue(String message) {
+    @RabbitListener(queues = "queueUser")
+    public void processQueueUser(String message) {
+        User user = new User();
+        user.setUserLine1("LINE_1 " + message);
+        user.setUserLine2("LINE_2 " + message);
+        complexUserRepository.createUser(user);
+    }
+
+    @RabbitListener(queues = "queueCommon")
+    public void processQueueCommon(String message) {
         User user = new User();
         user.setUserLine1("LINE_1 " + message);
         user.setUserLine2("LINE_2 " + message);

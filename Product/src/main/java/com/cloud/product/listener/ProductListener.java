@@ -13,12 +13,19 @@ public class ProductListener {
     @Autowired
     private ComplexProductRepository complexProductRepository;
 
-    @RabbitListener(queues = "queue")
+    @RabbitListener(queues = "queueProduct")
     public void processQueue(String message) {
         Product product = new Product();
         product.setProductLine1("LINE_1 " + message);
         product.setProductLine2("LINE_2 " + message);
         complexProductRepository.createProduct(product);
+    }
 
+    @RabbitListener(queues = "queueCommon")
+    public void processQueueCommon(String message) {
+        Product product = new Product();
+        product.setProductLine1("LINE_1 " + message);
+        product.setProductLine2("LINE_2 " + message);
+        complexProductRepository.createProduct(product);
     }
 }
