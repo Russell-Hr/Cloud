@@ -9,6 +9,7 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -72,23 +73,48 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public Binding bindingCart() {
+    public TopicExchange topicExchange() {
+        return new TopicExchange("topicExchange");
+    }
+
+    @Bean
+    public Binding bindingCartDirect() {
         return BindingBuilder.bind(queueCart()).to(directExchange()).with("toCartAndProduct");
     }
 
     @Bean
-    public Binding bindingProduct() {
+    public Binding bindingProductDirect() {
         return BindingBuilder.bind(queueProduct()).to(directExchange()).with("toCartAndProduct");
     }
 
     @Bean
-    public Binding bindingUser() {
+    public Binding bindingUserDirect() {
         return BindingBuilder.bind(queueUser()).to(directExchange()).with("toUserAndCheckout");
     }
 
     @Bean
-    public Binding bindingCheckout() {
+    public Binding bindingCheckoutDirect() {
         return BindingBuilder.bind(queueCheckout()).to(directExchange()).with("toUserAndCheckout");
+    }
+
+    @Bean
+    public Binding bindingCartTopic() {
+        return BindingBuilder.bind(queueCart()).to(topicExchange()).with("toCartAndCheckout.*");
+    }
+
+    @Bean
+    public Binding bindingProductTopic() {
+        return BindingBuilder.bind(queueProduct()).to(topicExchange()).with("*.toUserAndProduct");
+    }
+
+    @Bean
+    public Binding bindingUserTopic() {
+        return BindingBuilder.bind(queueUser()).to(topicExchange()).with("*.toUserAndProduct");
+    }
+
+    @Bean
+    public Binding bindingCheckoutTopic() {
+        return BindingBuilder.bind(queueCheckout()).to(topicExchange()).with("toCartAndCheckout.*");
     }
 
     @Bean

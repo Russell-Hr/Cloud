@@ -44,4 +44,19 @@ public class CartController {
         template.convertAndSend("toUserAndCheckout", "KeyMessageToUserAndCheckout");
         return ResponseEntity.ok("Added to queueUser and queueCheckout");
     }
+
+    @GetMapping("/topic1")
+    public ResponseEntity<String> createTopicMessageOne() {
+        template.setExchange("topicExchange");
+        template.convertAndSend("toCartAndCheckout.something", "TopicMessageToCartAndCheckout");
+        return ResponseEntity.ok("Added to queueCart and queueCheckout");
+    }
+
+    @GetMapping("/topic2")
+    public ResponseEntity<String> createTopicMessageTwo() {
+        template.setExchange("topicExchange");
+        template.convertAndSend("something.toUserAndProduct", "TopicMessageToUserAndProduct");
+        return ResponseEntity.ok("Added to queueUser and queueProduct");
+    }
+
 }
