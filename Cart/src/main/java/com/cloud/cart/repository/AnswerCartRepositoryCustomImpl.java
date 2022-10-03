@@ -7,11 +7,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CartRepositoryCustomImpl implements CartRepositoryCustom {
+public class AnswerCartRepositoryCustomImpl implements AnswerCartRepositoryCustom {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void createCart(Cart cart) {
-        mongoTemplate.save(cart);
+    public void createAnswerCart(AnswerCart answerCart) {
+        mongoTemplate.save(answerCart);
     }
 }

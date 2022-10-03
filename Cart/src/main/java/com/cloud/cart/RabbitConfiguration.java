@@ -10,6 +10,7 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -55,6 +56,16 @@ public class RabbitConfiguration {
     @Bean
     public Queue queueUser() {
         return new Queue("queueUser");
+    }
+
+    @Bean
+    public Queue queueUserReader() {
+        return new Queue("queueUserReader");
+    }
+
+    @Bean
+    public Queue queueCartReceiver() {
+        return new Queue("queueCartReceiver");
     }
 
     @Bean

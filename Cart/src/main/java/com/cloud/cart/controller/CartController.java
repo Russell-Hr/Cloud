@@ -1,10 +1,16 @@
 package com.cloud.cart.controller;
 
+import com.cloud.cart.entity.AnswerCart;
+import com.cloud.cart.listener.CartListener;
+import com.cloud.cart.repository.ComplexAnswerCartRepository;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class CartController {
@@ -12,15 +18,32 @@ public class CartController {
     private final RabbitTemplate template;
 
     @Autowired
+    CartListener cartListener;
+
+    @Autowired
+    private ComplexAnswerCartRepository complexAnswerCartRepository;
+
+    @Autowired
     public CartController(RabbitTemplate template) {
         this.template = template;
     }
 
-    @GetMapping("/direct")
+    @GetMapping("/create")
     public ResponseEntity<String> createDirectMessage() {
         String messageFromCart = "DirectMessageFromCart";
         template.convertAndSend("queueUser", messageFromCart);
         return ResponseEntity.ok("Added to a queueUser");
+    }
+
+    @GetMapping("/read")
+    public String readDirectMessage() {
+        String messageFromCart = "DirectMessageFromCartFindAll";
+        template.convertAndSend("queueUserReader", messageFromCart);
+        while (complexAnswerCartRepository.findAll().size() == 0) {
+        }
+        String answer = complexAnswerCartRepository.findAll().toString();
+        complexAnswerCartRepository.deleteAll();
+        return answer;
     }
 
     @GetMapping("/common")
