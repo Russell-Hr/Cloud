@@ -1,16 +1,16 @@
 package com.cloud.cart.controller;
 
-import com.cloud.cart.entity.AnswerCart;
 import com.cloud.cart.listener.CartListener;
 import com.cloud.cart.repository.ComplexAnswerCartRepository;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CartController {
@@ -28,7 +28,7 @@ public class CartController {
         this.template = template;
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<String> createDirectMessage() {
         String messageFromCart = "DirectMessageFromCart";
         template.convertAndSend("queueUser", messageFromCart);
@@ -46,7 +46,7 @@ public class CartController {
         return answer;
     }
 
-    @GetMapping("/common")
+    @PostMapping("/common")
     public ResponseEntity<String> createCommonMessage() {
         String messageFromCart = "CommonMessageFromCart";
         template.setExchange("commonExchange");
@@ -54,32 +54,31 @@ public class CartController {
         return ResponseEntity.ok("Added to a queueCommon");
     }
 
-    @GetMapping("/key1")
-    public ResponseEntity<String> createKeyMessageOne() {
+    @PostMapping("/key1")
+    public ResponseEntity<String> createKeyMessageOne(@RequestBody Map<String, String> map) {
         template.setExchange("directExchange");
-        template.convertAndSend("toCartAndProduct", "KeyMessageToCartAndProduct");
+        template.convertAndSend(map.get("key"), map.get("message"));
         return ResponseEntity.ok("Added to queueCart and queueProduct");
     }
 
-    @GetMapping("/key2")
-    public ResponseEntity<String> createKeyMessageTwo() {
+    @PostMapping("/key2")
+    public ResponseEntity<String> createKeyMessageTwo(@RequestBody Map<String, String> map) {
         template.setExchange("directExchange");
-        template.convertAndSend("toUserAndCheckout", "KeyMessageToUserAndCheckout");
+        template.convertAndSend(map.get("key"), map.get("message"));
         return ResponseEntity.ok("Added to queueUser and queueCheckout");
     }
 
-    @GetMapping("/topic1")
-    public ResponseEntity<String> createTopicMessageOne() {
+    @PostMapping("/topic1")
+    public ResponseEntity<String> createTopicMessageOne(@RequestBody Map<String, String> map) {
         template.setExchange("topicExchange");
-        template.convertAndSend("toCartAndCheckout.something", "TopicMessageToCartAndCheckout");
+        template.convertAndSend(map.get("key"), map.get("message"));
         return ResponseEntity.ok("Added to queueCart and queueCheckout");
     }
 
-    @GetMapping("/topic2")
-    public ResponseEntity<String> createTopicMessageTwo() {
+    @PostMapping("/topic2")
+    public ResponseEntity<String> createTopicMessageTwo(@RequestBody Map<String, String> map) {
         template.setExchange("topicExchange");
-        template.convertAndSend("something.toUserAndProduct", "TopicMessageToUserAndProduct");
+        template.convertAndSend(map.get("key"), map.get("message"));
         return ResponseEntity.ok("Added to queueUser and queueProduct");
     }
-
 }
