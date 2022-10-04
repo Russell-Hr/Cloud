@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface CheckoutRepository extends MongoRepository<Checkout, String> {
     List<Checkout> findByCheckoutLine1AndCheckoutLine2(String checkoutLine1, String checkoutLine2);
     List<Checkout> findByCheckoutLine1(String checkoutLine1);
