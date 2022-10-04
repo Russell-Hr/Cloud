@@ -36,13 +36,4 @@ public class UserListener {
         String users = complexUserRepository.findAll().toString();
         template.convertAndSend("queueCartReceiver", users);
     }
-
-    @RabbitListener(queues = "queueCommon")
-    public void processQueueCommon(String message) {
-        Now now = new Now();
-        User user = new User();
-        user.setUserLine1("LINE_1 " + message + " " + now.createNow());
-        user.setUserLine2("LINE_2 " + message + " " + now.createNow());
-        complexUserRepository.createUser(user);
-    }
 }

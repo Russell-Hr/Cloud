@@ -22,13 +22,4 @@ public class CheckoutListener {
         checkout.setCheckoutLine2("LINE_2 " + message + " " + now.createNow());
         complexCheckoutRepository.createCheckout(checkout);
     }
-
-    @RabbitListener(queues = "queueCommon")
-    public void processQueueCommon(String message) {
-        Now now = new Now();
-        Checkout checkout = new Checkout();
-        checkout.setCheckoutLine1("LINE_1 " + message + " " + now.createNow());
-        checkout.setCheckoutLine2("LINE_2 " + message + " " + now.createNow());
-        complexCheckoutRepository.createCheckout(checkout);
-    }
 }

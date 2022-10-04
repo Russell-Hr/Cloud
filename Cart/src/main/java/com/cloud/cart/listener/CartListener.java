@@ -34,13 +34,4 @@ public class CartListener {
         answerCart.setAnswer(message);
         complexAnswerCartRepository.createAnswerCart(answerCart);
     }
-
-    @RabbitListener(queues = "queueCommon")
-    public void processQueueCommon(String message) {
-        Now now = new Now();
-        Cart cart = new Cart();
-        cart.setCartLine1("LINE_1 " + message + " " + now.createNow());
-        cart.setCartLine2("LINE_2 " + message + " " + now.createNow());
-        complexCartRepository.createCart(cart);
-    }
 }

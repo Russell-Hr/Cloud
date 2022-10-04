@@ -10,7 +10,6 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -69,11 +68,6 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public Queue queueCommon() {
-        return new Queue("queueCommon");
-    }
-
-    @Bean
     public FanoutExchange fanoutExchange() {
         return new FanoutExchange("commonExchange");
     }
@@ -129,7 +123,22 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public Binding bindingCommon() {
-        return BindingBuilder.bind(queueCommon()).to(fanoutExchange());
+    public Binding bindingCartCommon() {
+        return BindingBuilder.bind(queueCart()).to(fanoutExchange());
+    }
+
+    @Bean
+    public Binding bindingCheckoutCommon() {
+        return BindingBuilder.bind(queueCheckout()).to(fanoutExchange());
+    }
+
+    @Bean
+    public Binding bindingProductCommon() {
+        return BindingBuilder.bind(queueProduct()).to(fanoutExchange());
+    }
+
+    @Bean
+    public Binding bindingUserCommon() {
+        return BindingBuilder.bind(queueUser()).to(fanoutExchange());
     }
 }

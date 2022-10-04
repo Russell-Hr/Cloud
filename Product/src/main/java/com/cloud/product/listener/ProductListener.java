@@ -22,13 +22,4 @@ public class ProductListener {
         product.setProductLine2("LINE_2 " + message + " " + now.createNow());
         complexProductRepository.createProduct(product);
     }
-
-    @RabbitListener(queues = "queueCommon")
-    public void processQueueCommon(String message) {
-        Now now = new Now();
-        Product product = new Product();
-        product.setProductLine1("LINE_1 " + message + " " + now.createNow());
-        product.setProductLine2("LINE_2 " + message + " " + now.createNow());
-        complexProductRepository.createProduct(product);
-    }
 }
